@@ -1,5 +1,6 @@
 package com.laam.tmdbclientkotlin.view
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
@@ -15,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.laam.tmdbclientkotlin.R
 import com.laam.tmdbclientkotlin.databinding.ActivityMainBinding
 import com.laam.tmdbclientkotlin.model.Movie
+import com.laam.tmdbclientkotlin.util.MOVIE_KEY_INTENT
 import com.laam.tmdbclientkotlin.view.adapter.MovieAdapter
 import com.laam.tmdbclientkotlin.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_movie.*
@@ -87,6 +89,9 @@ class MainActivity : AppCompatActivity() , MovieAdapter.ClickListener{
     }
 
     override fun onClickItemListener(movie: Movie) {
-        Toast.makeText(this, "movie : $movie", Toast.LENGTH_SHORT).show()
+        Intent(this, MovieActivity::class.java).also {
+            it.putExtra(MOVIE_KEY_INTENT, movie)
+            startActivity(it)
+        }
     }
 }

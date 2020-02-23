@@ -9,6 +9,8 @@ import com.laam.tmdbclientkotlin.R
 const val IMAGE_URL = "https://image.tmdb.org/t/p/w500"
 const val BASE_URL = "https://api.themoviedb.org/3/"
 
+const val MOVIE_KEY_INTENT = "movie_key_intent"
+
 fun ImageView.loadImage(url: String?) {
     val option = RequestOptions()
         .placeholder(R.drawable.loading)
