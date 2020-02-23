@@ -11,7 +11,7 @@ const val BASE_URL = "https://api.themoviedb.org/3/"
 
 fun ImageView.loadImage(url: String?) {
     val option = RequestOptions()
-        .placeholder(R.drawable.ic_launcher_foreground)
+        .placeholder(R.drawable.loading)
         .error(R.drawable.ic_launcher_background)
 
     Glide.with(context)
@@ -20,7 +20,7 @@ fun ImageView.loadImage(url: String?) {
         .into(this)
 }
 
-@BindingAdapter("android:imageUrl")
-fun loadImageUrl(view: ImageView, url: String?){
+@BindingAdapter(("imageUrl"))
+fun loadImageUrl(view: ImageView, url: String?) {
     view.loadImage("$IMAGE_URL$url")
 }

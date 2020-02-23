@@ -9,8 +9,9 @@ import com.laam.tmdbclientkotlin.databinding.MovieListItemBinding
 import com.laam.tmdbclientkotlin.model.Movie
 
 class MovieAdapter(
-    private val listMovie: List<Movie>
+    val clickListener: ClickListener
 ) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+    private var listMovie: ArrayList<Movie> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val movieListItemBinding: MovieListItemBinding = DataBindingUtil.inflate(
@@ -31,6 +32,22 @@ class MovieAdapter(
         holder.movieListItemBinding.movie = currentMovie
     }
 
+    fun setMovie(newListMovie: List<Movie>) {
+        listMovie = newListMovie as ArrayList<Movie>
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(val movieListItemBinding: MovieListItemBinding) :
-        RecyclerView.ViewHolder(movieListItemBinding.root)
+        RecyclerView.ViewHolder(movieListItemBinding.root) {
+
+        init {
+            movieListItemBinding.root.setOnClickListener {
+                clickListener.onClickItemListener(listMovie[adapterPosition])
+            }
+        }
+    }
+
+    interface ClickListener {
+        fun onClickItemListener(movie: Movie)
+    }
 }

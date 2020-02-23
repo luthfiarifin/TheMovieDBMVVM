@@ -1,20 +1,73 @@
 package com.laam.tmdbclientkotlin.view
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.laam.tmdbclientkotlin.R
+import com.laam.tmdbclientkotlin.databinding.ActivityMainBinding
+import com.laam.tmdbclientkotlin.model.Movie
+import com.laam.tmdbclientkotlin.view.adapter.MovieAdapter
+import com.laam.tmdbclientkotlin.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_movie.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , MovieAdapter.ClickListener{
+
+    private lateinit var activityMainBinding: ActivityMainBinding
+    private lateinit var rvMovie: RecyclerView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    private lateinit var viewModel: MainActivityViewModel
+
+    private var rvAdapter = MovieAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
 
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        rvMovie = activityMainBinding.rvMovies
+        swipeRefreshLayout = activityMainBinding.swipeLayout
 
+        viewModel = ViewModelProviders.of(this)[MainActivityViewModel::class.java]
+
+        initSwipeRefreshLayout()
+        initRecyclerView()
+        getPopularMovie()
+    }
+
+    private fun initSwipeRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener {
+            getPopularMovie()
+            swipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    private fun getPopularMovie() {
+        viewModel.getAllMovies().observe(this, Observer {
+            it?.let {list: List<Movie> ->
+                rvAdapter.setMovie(list)
+            }
+        })
+    }
+
+    private fun initRecyclerView() {
+        rvMovie.layoutManager =
+            if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                GridLayoutManager(this, 2)
+            } else {
+                GridLayoutManager(this, 4)
+            }
+
+        rvMovie.adapter = rvAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -31,5 +84,9 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onClickItemListener(movie: Movie) {
+        Toast.makeText(this, "movie : $movie", Toast.LENGTH_SHORT).show()
     }
 }
