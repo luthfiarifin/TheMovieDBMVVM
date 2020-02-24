@@ -3,6 +3,8 @@ package com.laam.tmdbclientkotlin.view.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.laam.tmdbclientkotlin.R
 import com.laam.tmdbclientkotlin.databinding.MovieListItemBinding
@@ -10,8 +12,7 @@ import com.laam.tmdbclientkotlin.model.Movie
 
 class MovieAdapter(
     val clickListener: ClickListener
-) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
-    private var listMovie: ArrayList<Movie> = arrayListOf()
+) : PagedListAdapter<Movie, MovieAdapter.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val movieListItemBinding: MovieListItemBinding = DataBindingUtil.inflate(
@@ -24,17 +25,10 @@ class MovieAdapter(
         return ViewHolder(movieListItemBinding)
     }
 
-    override fun getItemCount(): Int = listMovie.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentMovie = listMovie[position]
+        val currentMovie = getItem(position)
 
         holder.movieListItemBinding.movie = currentMovie
-    }
-
-    fun setMovie(newListMovie: List<Movie>) {
-        listMovie = newListMovie as ArrayList<Movie>
-        notifyDataSetChanged()
     }
 
     inner class ViewHolder(val movieListItemBinding: MovieListItemBinding) :
@@ -42,7 +36,9 @@ class MovieAdapter(
 
         init {
             movieListItemBinding.root.setOnClickListener {
-                clickListener.onClickItemListener(listMovie[adapterPosition])
+                getItem(adapterPosition)?.let {
+                    clickListener.onClickItemListener(it)
+                }
             }
         }
     }
@@ -50,4 +46,11 @@ class MovieAdapter(
     interface ClickListener {
         fun onClickItemListener(movie: Movie)
     }
+}
+
+val diffCallback: DiffUtil.ItemCallback<Movie> = object : DiffUtil.ItemCallback<Movie>() {
+    override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+        oldItem.id == newItem.id
+
+    override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean = true
 }

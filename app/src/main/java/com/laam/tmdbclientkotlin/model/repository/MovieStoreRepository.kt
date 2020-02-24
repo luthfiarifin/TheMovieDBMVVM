@@ -1,4 +1,4 @@
-package com.laam.tmdbclientkotlin.repository
+package com.laam.tmdbclientkotlin.model.repository
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData

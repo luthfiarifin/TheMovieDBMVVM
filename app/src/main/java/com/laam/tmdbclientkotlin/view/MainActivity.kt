@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -21,11 +22,13 @@ import com.laam.tmdbclientkotlin.view.adapter.MovieAdapter
 import com.laam.tmdbclientkotlin.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_movie.*
 
-class MainActivity : AppCompatActivity() , MovieAdapter.ClickListener{
+class MainActivity : AppCompatActivity(), MovieAdapter.ClickListener {
 
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var rvMovie: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    private lateinit var movies: PagedList<Movie>
 
     private lateinit var viewModel: MainActivityViewModel
 
@@ -54,9 +57,16 @@ class MainActivity : AppCompatActivity() , MovieAdapter.ClickListener{
     }
 
     private fun getPopularMovie() {
-        viewModel.getAllMovies().observe(this, Observer {
-            it?.let {list: List<Movie> ->
-                rvAdapter.setMovie(list)
+//        viewModel.getAllMovies().observe(this, Observer {
+//            it?.let {list: List<Movie> ->
+//                rvAdapter.setMovie(list)
+//            }
+//        })
+
+        viewModel.getMoviePagedList().observe(this, Observer {
+            it?.let { pagedList ->
+                movies = pagedList
+                rvAdapter.submitList(movies)
             }
         })
     }
