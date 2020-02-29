@@ -14,13 +14,16 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.laam.tmdbclientkotlin.BaseApp
 import com.laam.tmdbclientkotlin.R
 import com.laam.tmdbclientkotlin.databinding.ActivityMainBinding
 import com.laam.tmdbclientkotlin.model.Movie
 import com.laam.tmdbclientkotlin.util.MOVIE_KEY_INTENT
 import com.laam.tmdbclientkotlin.view.adapter.MovieAdapter
 import com.laam.tmdbclientkotlin.viewmodel.MainActivityViewModel
+import com.laam.tmdbclientkotlin.viewmodel.MainActivityViewModelFactory
 import kotlinx.android.synthetic.main.activity_movie.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MovieAdapter.ClickListener {
 
@@ -30,6 +33,8 @@ class MainActivity : AppCompatActivity(), MovieAdapter.ClickListener {
 
     private lateinit var movies: PagedList<Movie>
 
+    @Inject
+    lateinit var factory: MainActivityViewModelFactory
     private lateinit var viewModel: MainActivityViewModel
 
     private var rvAdapter = MovieAdapter(this)
@@ -42,7 +47,8 @@ class MainActivity : AppCompatActivity(), MovieAdapter.ClickListener {
         rvMovie = activityMainBinding.rvMovies
         swipeRefreshLayout = activityMainBinding.swipeLayout
 
-        viewModel = ViewModelProviders.of(this)[MainActivityViewModel::class.java]
+        BaseApp.getBaseApp().getTmdbAppComponent().inject(this)
+        viewModel = ViewModelProviders.of(this, factory)[MainActivityViewModel::class.java]
 
         initSwipeRefreshLayout()
         initRecyclerView()

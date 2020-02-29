@@ -1,9 +1,8 @@
 package com.laam.tmdbclientkotlin.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.laam.tmdbclientkotlin.model.Movie
@@ -13,16 +12,16 @@ import com.laam.tmdbclientkotlin.model.repository.MovieStoreRepository
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
-class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val movieStoreRepository = MovieStoreRepository(application)
+class MainActivityViewModel(
+    val movieStoreRepository: MovieStoreRepository,
+    factory: MovieDataSourceFactory
+) : ViewModel() {
 
     private var movieDataSourceLiveData: MutableLiveData<MovieDataSource>
     private var executor: Executor
     private lateinit var moviePagedList: LiveData<PagedList<Movie>>
 
     init {
-        val factory = MovieDataSourceFactory(application)
         movieDataSourceLiveData = factory.getMutableLiveData()
 
         val config = PagedList.Config.Builder()
