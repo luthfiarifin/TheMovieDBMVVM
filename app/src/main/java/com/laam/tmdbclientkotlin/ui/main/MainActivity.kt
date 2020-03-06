@@ -1,12 +1,10 @@
-package com.laam.tmdbclientkotlin.view
+package com.laam.tmdbclientkotlin.ui.main
 
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,18 +12,16 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.laam.tmdbclientkotlin.BaseApp
+import com.laam.tmdbclientkotlin.BaseActivity
+import com.laam.tmdbclientkotlin.BaseApplication
 import com.laam.tmdbclientkotlin.R
 import com.laam.tmdbclientkotlin.databinding.ActivityMainBinding
 import com.laam.tmdbclientkotlin.model.Movie
 import com.laam.tmdbclientkotlin.util.MOVIE_KEY_INTENT
-import com.laam.tmdbclientkotlin.view.adapter.MovieAdapter
-import com.laam.tmdbclientkotlin.viewmodel.MainActivityViewModel
-import com.laam.tmdbclientkotlin.viewmodel.MainActivityViewModelFactory
-import kotlinx.android.synthetic.main.activity_movie.*
+import com.laam.tmdbclientkotlin.ui.movie.MovieActivity
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MovieAdapter.ClickListener {
+class MainActivity : BaseActivity(), MovieAdapter.ClickListener {
 
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var rvMovie: RecyclerView
@@ -47,7 +43,6 @@ class MainActivity : AppCompatActivity(), MovieAdapter.ClickListener {
         rvMovie = activityMainBinding.rvMovies
         swipeRefreshLayout = activityMainBinding.swipeLayout
 
-        BaseApp.getBaseApp().getTmdbAppComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory)[MainActivityViewModel::class.java]
 
         initSwipeRefreshLayout()
@@ -63,12 +58,6 @@ class MainActivity : AppCompatActivity(), MovieAdapter.ClickListener {
     }
 
     private fun getPopularMovie() {
-//        viewModel.getAllMovies().observe(this, Observer {
-//            it?.let {list: List<Movie> ->
-//                rvAdapter.setMovie(list)
-//            }
-//        })
-
         viewModel.getMoviePagedList().observe(this, Observer {
             it?.let { pagedList ->
                 movies = pagedList
