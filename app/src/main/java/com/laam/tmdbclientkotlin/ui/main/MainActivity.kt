@@ -19,6 +19,7 @@ import com.laam.tmdbclientkotlin.databinding.ActivityMainBinding
 import com.laam.tmdbclientkotlin.model.Movie
 import com.laam.tmdbclientkotlin.util.MOVIE_KEY_INTENT
 import com.laam.tmdbclientkotlin.ui.movie.MovieActivity
+import com.laam.tmdbclientkotlin.util.ViewModelProviderFactory
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), MovieAdapter.ClickListener {
@@ -30,7 +31,7 @@ class MainActivity : BaseActivity(), MovieAdapter.ClickListener {
     private lateinit var movies: PagedList<Movie>
 
     @Inject
-    lateinit var factory: MainActivityViewModelFactory
+    lateinit var factory: ViewModelProviderFactory
     private lateinit var viewModel: MainActivityViewModel
 
     private var rvAdapter = MovieAdapter(this)
