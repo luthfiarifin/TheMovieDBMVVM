@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import com.laam.tmdbclientkotlin.R
 import com.laam.tmdbclientkotlin.model.Movie
 import com.laam.tmdbclientkotlin.model.MovieResponseDB
-import com.laam.tmdbclientkotlin.service.RetrofitInstance
+import com.laam.tmdbclientkotlin.network.RetrofitInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class MovieStoreRepository(val application: Application) {
+class MovieStoreRepository @Inject constructor(
+    val application: Application
+) {
 
     private var movieList: ArrayList<Movie> = arrayListOf()
     private var mutableLiveData: MutableLiveData<List<Movie>> = MutableLiveData()

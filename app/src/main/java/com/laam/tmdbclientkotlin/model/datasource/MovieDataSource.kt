@@ -5,7 +5,7 @@ import androidx.paging.PageKeyedDataSource
 import com.laam.tmdbclientkotlin.R
 import com.laam.tmdbclientkotlin.model.Movie
 import com.laam.tmdbclientkotlin.model.MovieResponseDB
-import com.laam.tmdbclientkotlin.service.RetrofitInstance
+import com.laam.tmdbclientkotlin.network.RetrofitInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

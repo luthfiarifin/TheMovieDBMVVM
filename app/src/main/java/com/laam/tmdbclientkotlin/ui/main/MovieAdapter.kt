@@ -1,4 +1,4 @@
-package com.laam.tmdbclientkotlin.view.adapter
+package com.laam.tmdbclientkotlin.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +12,9 @@ import com.laam.tmdbclientkotlin.model.Movie
 
 class MovieAdapter(
     val clickListener: ClickListener
-) : PagedListAdapter<Movie, MovieAdapter.ViewHolder>(diffCallback) {
+) : PagedListAdapter<Movie, MovieAdapter.ViewHolder>(
+    diffCallback
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val movieListItemBinding: MovieListItemBinding = DataBindingUtil.inflate(

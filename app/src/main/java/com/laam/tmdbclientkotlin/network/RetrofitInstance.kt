@@ -1,4 +1,4 @@
-package com.laam.tmdbclientkotlin.service
+package com.laam.tmdbclientkotlin.network
 
 import com.laam.tmdbclientkotlin.util.BASE_URL
 import retrofit2.Retrofit
@@ -12,7 +12,7 @@ object RetrofitInstance {
 
     private val retrofit = builder.build()
 
-    fun getService(): MovieDataService {
-        return retrofit.create(MovieDataService::class.java)
+    fun getService(): MovieAPI {
+        return retrofit.create(MovieAPI::class.java)
     }
 }
