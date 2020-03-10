@@ -14,14 +14,14 @@ object MainModule {
     @MainScope
     @JvmStatic
     @Provides
-    fun provideMovieRepository(application: Application) =
-        MovieStoreRepository(application)
+    fun provideMovieRepository(application: Application, movieAPI: MovieAPI) =
+        MovieStoreRepository(application, movieAPI)
 
     @MainScope
     @JvmStatic
     @Provides
-    fun provideMovieDataSourceFactory(application: Application) =
-        MovieDataSourceFactory(application)
+    fun provideMovieDataSourceFactory(application: Application, movieAPI: MovieAPI) =
+        MovieDataSourceFactory(application, movieAPI)
 
     @MainScope
     @JvmStatic

@@ -5,21 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import com.laam.tmdbclientkotlin.R
 import com.laam.tmdbclientkotlin.model.Movie
 import com.laam.tmdbclientkotlin.model.MovieResponseDB
-import com.laam.tmdbclientkotlin.network.RetrofitInstance
+import com.laam.tmdbclientkotlin.network.MovieAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
 class MovieStoreRepository @Inject constructor(
-    val application: Application
+    val application: Application,
+    val movieAPI: MovieAPI
 ) {
 
     private var movieList: ArrayList<Movie> = arrayListOf()
     private var mutableLiveData: MutableLiveData<List<Movie>> = MutableLiveData()
 
     fun getMutableLiveData(): MutableLiveData<List<Movie>> {
-        RetrofitInstance.getService()
+        movieAPI
             .getPopularMovies(application.applicationContext.getString(R.string.API_KEY))
             .enqueue(object : Callback<MovieResponseDB> {
                 override fun onResponse(

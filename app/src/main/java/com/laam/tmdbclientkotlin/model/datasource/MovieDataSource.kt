@@ -5,19 +5,21 @@ import androidx.paging.PageKeyedDataSource
 import com.laam.tmdbclientkotlin.R
 import com.laam.tmdbclientkotlin.model.Movie
 import com.laam.tmdbclientkotlin.model.MovieResponseDB
-import com.laam.tmdbclientkotlin.network.RetrofitInstance
+import com.laam.tmdbclientkotlin.network.MovieAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MovieDataSource(
-    val application: Application
+    val application: Application,
+    val movieAPI: MovieAPI
 ) : PageKeyedDataSource<Long, Movie>() {
+
     override fun loadInitial(
         params: LoadInitialParams<Long>,
         callback: LoadInitialCallback<Long, Movie>
     ) {
-        RetrofitInstance.getService()
+        movieAPI
             .getPopularMoviesWithPaging(
                 application.applicationContext.getString(R.string.API_KEY),
                 1
@@ -40,7 +42,7 @@ class MovieDataSource(
     }
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, Movie>) {
-        RetrofitInstance.getService()
+        movieAPI
             .getPopularMoviesWithPaging(
                 application.applicationContext.getString(R.string.API_KEY),
                 params.key
